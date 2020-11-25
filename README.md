@@ -13,7 +13,7 @@ Code was divided into multiple segments
 - Data Collection [Arduino]: 
 In this stage, data from the Hall Effect Sensors are collected using the Arduino and are printed onto the Serial to allow for the Data Organization Stage to take place
 
-- Serial Port Reader [Python]
+- Serial Port Reader [Python]: 
 Data in this stage is read from the Serial Port
 
 - Data Organization [Python]: 
