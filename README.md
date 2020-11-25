@@ -16,5 +16,5 @@ In this stage, data from the Hall Effect Sensors are collected using the Arduino
 - Data Organization [Python]: 
 Data Collected for each move is then organized using Python and are translated to chess notation
 
-- Chess Game GUI [Python]: 
+- Chess Game GUI [Python] (Still in Progress): 
 Moves documented in the Data Organization Stage are displayed onto the screen for viewers to observe
