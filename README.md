@@ -19,5 +19,11 @@ Data in this stage is read from the Serial Port
 - Data Organization [Python]: 
 Data Collected for each move is then organized using Python and are translated to chess notation
 
+
+Work left for future iterations:
+
 - Chess Game GUI [Python] (Still in Progress): 
 Moves documented in the Data Organization Stage are displayed onto the screen for viewers to observe
+
+- Post Match Analysis [Python]:
+Moves made during match are analyzed using the Stockfish Chess Engine API
