@@ -198,4 +198,3 @@ def printBoard():
             else:
                 print(square.getSymbol(), end = ' ')
         print()
-
