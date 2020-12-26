@@ -12,8 +12,6 @@ piece_number = 4
 row_number = 8
 col_number = 8
 
-board = [[0 for i in range(col_number)] for i in range (row_number)]
-pieces = []
 
 class Piece:
     def __init__(self, symbol, color, position):
@@ -41,27 +39,12 @@ class Piece:
         return self.taken
 
 '''
-MOVE FUNCTION:
-    - Takes in old position of the piece and the new position the piece moves to
-    - If piece moves to a piece where an existing piece is, that piece is captured (Captured variable = True)
-'''
-
-def move(board,old,new):
-    piece = board[old[0]][old[1]]
-    piece.setPosition(new)
-
-    if board[new[0]][new[1]] != 0:
-        board[new[0]][new[1]].capture()
-
-    updateBoard(board)
-
-'''
 updateBOARD FUNCTION
     1. Resets board to 0s
     2. Reads through the pieces stored in the pieces list
     3. If piece is not captured, its position on this board stores this object.
 '''
-def updateBoard(board):
+def updateBoard(board,pieces):
     board = [[0 for i in range(col_number)] for i in range(row_number)]
     for piece in pieces:
         if not piece.getTaken():
@@ -76,15 +59,14 @@ INPUT ARRANGEMENT FUNCTION:
         a. If move number == 3: No piece was captured
         b. If move number == 4: Piece was captured
 '''
-def input_arrangement(board,board_string):
-    moves_num = int(len(board_string)/piece_number)
+def input_arrangement(board,pieces,board_string):
+    moves_num = int(len(board_string)/(col_number*row_number))
     arranged_moves = arrange_moves(board_string,moves_num)
 
     if moves_num == 3:
-        moving(board,arranged_moves)
+        moving(board,pieces,arranged_moves)
     elif moves_num == 4:
-        capturing_piece(board,arranged_moves)
-
+        capturing_piece(board,pieces,arranged_moves)
 
 '''
 ARRANGE MOVES FUNCTION + COL_SPLTTING:
@@ -95,7 +77,7 @@ ARRANGE MOVES FUNCTION + COL_SPLTTING:
 def arrange_moves(board_string, move_number):
     moves = []
     for i in range(move_number):
-        moves.append(col_splitting(board_string[i*piece_number:(i+1)*piece_number]))
+        moves.append(col_splitting(board_string[i*(col_number*row_number):(i+1)*(col_number*row_number)]))
     return moves
 
 def col_splitting(arr):
@@ -121,11 +103,11 @@ MOVING FUNCTION:
     1. Determines, the piece old and new_position using the DIFFERENCE LIST function
     2. Calls move function on these positions
 '''
-def moving(board,move_array):
+def moving(board,pieces,move_array):
     piece_position = difference_list(move_array[0], move_array[1])
     new_position = difference_list(move_array[1], move_array[2])
 
-    move(board,piece_position,new_position)
+    move(board,pieces,piece_position,new_position)
 
 
 '''
@@ -135,15 +117,31 @@ CAPTURING PIECE:
     3. Calls move fynction on appropriate positions and pieces
 '''
 
-def capturing_piece(board,move_array):
+def capturing_piece(board,pieces,move_array):
     first_piece_lift = difference_list(move_array[0], move_array[1])
     second_piece_lift = difference_list(move_array[1], move_array[2])
     piece_drop = difference_list(move_array[2], move_array[3])
 
     if first_piece_lift == piece_drop:
-        move(board,second_piece_lift, piece_drop)
+        move(board,pieces,second_piece_lift, piece_drop)
     else:
-        move(board,first_piece_lift, piece_drop)
+        move(board,pieces,first_piece_lift, piece_drop)
+
+
+'''
+MOVE FUNCTION:
+    - Takes in old position of the piece and the new position the piece moves to
+    - If piece moves to a piece where an existing piece is, that piece is captured (Captured variable = True)
+'''
+
+def move(board,pieces,old,new):
+    piece = board[old[0]][old[1]]
+    piece.setPosition(new)
+
+    if board[new[0]][new[1]] != 0:
+        board[new[0]][new[1]].capture()
+
+    updateBoard(board,pieces)
 
 
 '''
@@ -151,8 +149,9 @@ STARTING POSITION:
     1. Initiatializes the appropriate instances of pieces
     2. Sets positions of pieces to appropriate position on the board 
 '''
-def starting_board(board):
+def starting_board(board, pieces):
     board = [[0 for i in range(col_number)] for i in range (row_number)]
+    pieces = []
 
     for x in range(2):
         if x == 0:
@@ -166,25 +165,27 @@ def starting_board(board):
         
         # Pawns
         for i in range(8):
-            board[p_row][i] = Piece('p', color, (p_row,i))
+            pieces.append(Piece('p', color, (p_row,i))
         
         # King
-        board[row][4] = Piece('K', color, (row, 4))
+        pieces.append(Piece('K', color, (row, 4)))
 
         # Queen
-        board[row][3] = Piece('Q', color, (row, 3))
+        pieces.append(Piece('Q', color, (row, 3)))
 
         # Knights
-        board[row][1] = Piece('N', color, (row, 1))
-        board[row][6] = Piece('N', color, (row, 6))
+        pieces.append(Piece('N', color, (row, 1)))
+        pieces.append(Piece('N', color, (row, 6)))
 
         # Bishops
-        board[row][2] = Piece('B', color, (row, 2))
-        board[row][5] = Piece('B', color, (row, 5))
+        pieces.append(Piece('B', color, (row, 2)))
+        pieces.append(Piece('B', color, (row, 5)))
 
         # Rooks
-        board[row][0] = Piece('R', color, (row, 0))
-        board[row][7] = Piece('R', color, (row, 7))
+        pieces.append(Piece('R', color, (row, 0)))
+        pieces.append(Piece('R', color, (row, 7)))
+    
+    updateBoard(board)
         
 '''
 PRINT BOARD (for testing purposes):
