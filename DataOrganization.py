@@ -165,10 +165,10 @@ def starting_board(board, pieces):
         
         # Pawns
         for i in range(8):
-            pieces.append(Piece('p', color, (p_row,i))
+            pieces.append(Piece('p', color, (p_row,i)))
         
         # King
-        pieces.append(Piece('K', color, (row, 4)))
+        pieces.append(Piece('K',color,(row,4)))
 
         # Queen
         pieces.append(Piece('Q', color, (row, 3)))
@@ -185,13 +185,13 @@ def starting_board(board, pieces):
         pieces.append(Piece('R', color, (row, 0)))
         pieces.append(Piece('R', color, (row, 7)))
     
-    updateBoard(board)
+    updateBoard(board,pieces)
         
 '''
 PRINT BOARD (for testing purposes):
     Prints board to console
 '''
-def printBoard():
+def printBoard(board):
     for row in board:
         for square in row:
             if square == 0:
