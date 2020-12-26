@@ -46,14 +46,14 @@ MOVE FUNCTION:
     - If piece moves to a piece where an existing piece is, that piece is captured (Captured variable = True)
 '''
 
-def move(old,new):
+def move(board,old,new):
     piece = board[old[0]][old[1]]
     piece.setPosition(new)
 
     if board[new[0]][new[1]] != 0:
         board[new[0]][new[1]].capture()
 
-    updateBoard()
+    updateBoard(board)
 
 '''
 updateBOARD FUNCTION
@@ -61,12 +61,12 @@ updateBOARD FUNCTION
     2. Reads through the pieces stored in the pieces list
     3. If piece is not captured, its position on this board stores this object.
 '''
-def updateBoard():
-    globals()['board'] = [[0 for i in range(col_number)] for i in range(row_number)]
+def updateBoard(board):
+    board = [[0 for i in range(col_number)] for i in range(row_number)]
     for piece in pieces:
         if not piece.getTaken():
             position = piece.getPosition()
-            globals()['board'][position[0]][position[1]] = piece
+            board[position[0]][position[1]] = piece
 
 '''
 INPUT ARRANGEMENT FUNCTION:
@@ -76,14 +76,14 @@ INPUT ARRANGEMENT FUNCTION:
         a. If move number == 3: No piece was captured
         b. If move number == 4: Piece was captured
 '''
-def input_arrangement(board_string):
+def input_arrangement(board,board_string):
     moves_num = int(len(board_string)/piece_number)
     arranged_moves = arrange_moves(board_string,moves_num)
 
     if moves_num == 3:
-        moving(arranged_moves)
+        moving(board,arranged_moves)
     elif moves_num == 4:
-        capturing_piece(arranged_moves)
+        capturing_piece(board,arranged_moves)
 
 
 '''
@@ -121,11 +121,11 @@ MOVING FUNCTION:
     1. Determines, the piece old and new_position using the DIFFERENCE LIST function
     2. Calls move function on these positions
 '''
-def moving(move_array):
+def moving(board,move_array):
     piece_position = difference_list(move_array[0], move_array[1])
     new_position = difference_list(move_array[1], move_array[2])
 
-    move(piece_position,new_position)
+    move(board,piece_position,new_position)
 
 
 '''
@@ -135,15 +135,15 @@ CAPTURING PIECE:
     3. Calls move fynction on appropriate positions and pieces
 '''
 
-def capturing_piece(move_array):
+def capturing_piece(board,move_array):
     first_piece_lift = difference_list(move_array[0], move_array[1])
     second_piece_lift = difference_list(move_array[1], move_array[2])
     piece_drop = difference_list(move_array[2], move_array[3])
 
     if first_piece_lift == piece_drop:
-        move(second_piece_lift, piece_drop)
+        move(board,second_piece_lift, piece_drop)
     else:
-        move(first_piece_lift, piece_drop)
+        move(board,first_piece_lift, piece_drop)
 
 
 '''
@@ -151,8 +151,8 @@ STARTING POSITION:
     1. Initiatializes the appropriate instances of pieces
     2. Sets positions of pieces to appropriate position on the board 
 '''
-def starting_board():
-    globals()['board'] = [[0 for i in range(col_number)] for i in range (row_number)]
+def starting_board(board):
+    board = [[0 for i in range(col_number)] for i in range (row_number)]
 
     for x in range(2):
         if x == 0:
