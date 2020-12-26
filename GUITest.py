@@ -26,6 +26,7 @@ def load_images():
 def start_up():
     DataOrganization.starting_board(board,pieces)
     pygame.init()
+    pygame.display.set_caption("DigiBoard Viewer")
     screen = pygame.display.set_mode((WIDTH,HEIGHT))
     clock = pygame.time.Clock()
     screen.fill(pygame.Color("White"))
