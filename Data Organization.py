@@ -199,5 +199,3 @@ def printBoard():
                 print(square.getSymbol(), end = ' ')
         print()
 
-# HI GITHUB
-# This should work right now
