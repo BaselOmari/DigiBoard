@@ -16,12 +16,12 @@ def load_images():
             c = 'W'
         else:
             c = 'B'
-        IMAGES[f'{c}p'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images\\{c}_Pawn.png"), (SQ_SIZE,SQ_SIZE))
-        IMAGES[f'{c}K'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images\\{c}_King.png"), (SQ_SIZE, SQ_SIZE))
-        IMAGES[f'{c}Q'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images\\{c}_Queen.png"), (SQ_SIZE, SQ_SIZE))
-        IMAGES[f'{c}N'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images\\{c}_Knight.png"), (SQ_SIZE, SQ_SIZE))
-        IMAGES[f'{c}B'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images\\{c}_Bishop.png"), (SQ_SIZE, SQ_SIZE))
-        IMAGES[f'{c}R'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images\\{c}_Rook.png"), (SQ_SIZE, SQ_SIZE))
+        IMAGES[f'{c}p'] = pygame.transform.scale(pygame.image.load(f"Chess_Piece_Images/{c}_Pawn.png"), (SQ_SIZE,SQ_SIZE))
+        IMAGES[f'{c}K'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images/{c}_King.png"), (SQ_SIZE, SQ_SIZE))
+        IMAGES[f'{c}Q'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images/{c}_Queen.png"), (SQ_SIZE, SQ_SIZE))
+        IMAGES[f'{c}N'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images/{c}_Knight.png"), (SQ_SIZE, SQ_SIZE))
+        IMAGES[f'{c}B'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images/{c}_Bishop.png"), (SQ_SIZE, SQ_SIZE))
+        IMAGES[f'{c}R'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images/{c}_Rook.png"), (SQ_SIZE, SQ_SIZE))
 
 def start_up():
     DataOrganization.starting_board(board,pieces)
@@ -65,3 +65,5 @@ def drawPieces(screen,board):
             if piece != 0:
                 piece_string = piece.getColor() + piece.getSymbol()
                 screen.blit(IMAGES[piece_string], pygame.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+
+start_up()
