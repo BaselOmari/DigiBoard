@@ -1,5 +1,5 @@
 import pygame
-import Data Organization
+import DataOrganization
 
 IMAGES = {}
 WIDTH = HEIGHT = 512
@@ -7,7 +7,8 @@ DIMENSION = 8
 SQ_SIZE = HEIGHT//DIMENSION
 MAX_FPS = 15
 
-board = 
+board = [[0 for i in range(DataOrganization.col_number)] for i in range (DataOrganization.row_number)]
+pieces = []
 
 def load_images():
     for i in range(2):
@@ -15,14 +16,15 @@ def load_images():
             c = 'W'
         else:
             c = 'B'
-        IMAGES[f'{c}pawn'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images\\{c}_Pawn.png"), (SQ_SIZE,SQ_SIZE))
-        IMAGES[f'{c}king'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images\\{c}_King.png"), (SQ_SIZE, SQ_SIZE))
-        IMAGES[f'{c}queen'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images\\{c}_Queen.png"), (SQ_SIZE, SQ_SIZE))
-        IMAGES[f'{c}knight'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images\\{c}_Knight.png"), (SQ_SIZE, SQ_SIZE))
-        IMAGES[f'{c}bishop'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images\\{c}_Bishop.png"), (SQ_SIZE, SQ_SIZE))
-        IMAGES[f'{c}rook'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images\\{c}_Rook.png"), (SQ_SIZE, SQ_SIZE))
+        IMAGES[f'{c}p'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images\\{c}_Pawn.png"), (SQ_SIZE,SQ_SIZE))
+        IMAGES[f'{c}K'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images\\{c}_King.png"), (SQ_SIZE, SQ_SIZE))
+        IMAGES[f'{c}Q'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images\\{c}_Queen.png"), (SQ_SIZE, SQ_SIZE))
+        IMAGES[f'{c}N'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images\\{c}_Knight.png"), (SQ_SIZE, SQ_SIZE))
+        IMAGES[f'{c}B'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images\\{c}_Bishop.png"), (SQ_SIZE, SQ_SIZE))
+        IMAGES[f'{c}R'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images\\{c}_Rook.png"), (SQ_SIZE, SQ_SIZE))
 
 def start_up():
+    DataOrganization.starting_board(board,pieces)
     pygame.init()
     screen = pygame.display.set_mode((WIDTH,HEIGHT))
     clock = pygame.time.Clock()
@@ -42,9 +44,9 @@ def start_up():
         pygame.display.flip()
 
 
-def drawGameState(screen, gs):
+def drawGameState(screen, board):
     drawBoard(screen)
-    drawPieces(screen, gs.board)
+    drawPieces(screen, board)
 
 def drawBoard(screen):
     colours = [pygame.Color("white"),pygame.Color("gray")]
@@ -60,4 +62,5 @@ def drawPieces(screen,board):
         for c in range(DIMENSION):
             piece = board[r][c]
             if piece != 0:
-                screen.blit(IMAGES[piece], pygame.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+                piece_string = piece.getColor() + piece.getSymbol()
+                screen.blit(IMAGES[piece_string], pygame.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
