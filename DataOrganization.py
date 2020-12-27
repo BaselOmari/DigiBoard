@@ -1,3 +1,8 @@
+'''
+NOTES:
+    Facing a lot of issues with passing by reference, have changed configuration to assigning return values.
+'''
+
 ''' Notation Coordinates (row, col), thus a1 would be (7,0), 7th row and 0th column (CS Notation)'''
 ''' Piece symbol:
         p: Pawn
@@ -14,10 +19,10 @@ col_number = 8
 
 
 class Piece:
-    def __init__(self, symbol, color, position):
-        self.symbol = symbol
-        self.color = color
-        self.position = position
+    def __init__(self, s, c, p):
+        self.symbol = s
+        self.color = c
+        self.position = p
         self.taken = False
 
     def setPosition(self, new_position):
@@ -44,12 +49,14 @@ updateBOARD FUNCTION
     2. Reads through the pieces stored in the pieces list
     3. If piece is not captured, its position on this board stores this object.
 '''
-def updateBoard(board,pieces):
-    board = [[0 for i in range(col_number)] for i in range(row_number)]
-    for piece in pieces:
+def updateBoard(board_ub,pieces_ub):
+    board_ub = [[0 for i in range(col_number)] for i in range(row_number)]
+    for piece in pieces_ub:
         if not piece.getTaken():
             position = piece.getPosition()
-            board[position[0]][position[1]] = piece
+            board_ub[position[0]][position[1]] = piece
+    
+    return board_ub,pieces_ub
 
 '''
 INPUT ARRANGEMENT FUNCTION:
@@ -59,14 +66,16 @@ INPUT ARRANGEMENT FUNCTION:
         a. If move number == 3: No piece was captured
         b. If move number == 4: Piece was captured
 '''
-def input_arrangement(board,pieces,board_string):
+def input_arrangement(board_ia,pieces_ia,board_string):
     moves_num = int(len(board_string)/(col_number*row_number))
     arranged_moves = arrange_moves(board_string,moves_num)
 
     if moves_num == 3:
-        moving(board,pieces,arranged_moves)
+        board_ia, pieces_ia = moving(board_ia,pieces_ia,arranged_moves)
     elif moves_num == 4:
-        capturing_piece(board,pieces,arranged_moves)
+        board_ia, pieces_ia = capturing_piece(board_ia,pieces_ia,arranged_moves)
+    
+    return board_ia, pieces_ia
 
 '''
 ARRANGE MOVES FUNCTION + COL_SPLTTING:
@@ -103,11 +112,13 @@ MOVING FUNCTION:
     1. Determines, the piece old and new_position using the DIFFERENCE LIST function
     2. Calls move function on these positions
 '''
-def moving(board,pieces,move_array):
+def moving(board_mg,pieces_mg,move_array):
     piece_position = difference_list(move_array[0], move_array[1])
     new_position = difference_list(move_array[1], move_array[2])
 
-    move(board,pieces,piece_position,new_position)
+    board_mg, pieces_mg = move(board_mg,pieces_mg,piece_position,new_position)
+    return board_mg, pieces_mg
+
 
 
 '''
@@ -117,15 +128,19 @@ CAPTURING PIECE:
     3. Calls move fynction on appropriate positions and pieces
 '''
 
-def capturing_piece(board,pieces,move_array):
+def capturing_piece(board_cp,pieces_cp,move_array):
     first_piece_lift = difference_list(move_array[0], move_array[1])
     second_piece_lift = difference_list(move_array[1], move_array[2])
     piece_drop = difference_list(move_array[2], move_array[3])
 
     if first_piece_lift == piece_drop:
-        move(board,pieces,second_piece_lift, piece_drop)
+        board_cp, pieces_cp = move(board_cp,pieces_cp,second_piece_lift, piece_drop)
     else:
-        move(board,pieces,first_piece_lift, piece_drop)
+        board_cp, pieces_cp = move(board_cp,pieces_cp,first_piece_lift, piece_drop)
+    
+    return board_cp, pieces_cp
+    
+
 
 
 '''
@@ -134,14 +149,16 @@ MOVE FUNCTION:
     - If piece moves to a piece where an existing piece is, that piece is captured (Captured variable = True)
 '''
 
-def move(board,pieces,old,new):
-    piece = board[old[0]][old[1]]
-    piece.setPosition(new)
+def move(board_m,pieces_m,old,new):
+    piece_m = board_m[old[0]][old[1]]
+    piece_m.setPosition(new)
 
-    if board[new[0]][new[1]] != 0:
-        board[new[0]][new[1]].capture()
+    if board_m[new[0]][new[1]] != 0:
+        board_m[new[0]][new[1]].capture()
 
-    updateBoard(board,pieces)
+    board_m, pieces_m = updateBoard(board_m,pieces_m)
+
+    return board_m, pieces_m
 
 
 '''
@@ -149,9 +166,9 @@ STARTING POSITION:
     1. Initiatializes the appropriate instances of pieces
     2. Sets positions of pieces to appropriate position on the board 
 '''
-def starting_board(board, pieces):
-    board = [[0 for i in range(col_number)] for i in range (row_number)]
-    pieces = []
+def starting_board(board_sb, pieces_sb):
+    board_sb = [[0 for i in range(col_number)] for i in range (row_number)]
+    pieces_sb = []
 
     for x in range(2):
         if x == 0:
@@ -165,34 +182,37 @@ def starting_board(board, pieces):
         
         # Pawns
         for i in range(8):
-            pieces.append(Piece('p', color, (p_row,i)))
+            pieces_sb.append(Piece('p', color, (p_row,i)))
         
         # King
-        pieces.append(Piece('K',color,(row,4)))
+        pieces_sb.append(Piece('K',color,(row,4)))
 
         # Queen
-        pieces.append(Piece('Q', color, (row, 3)))
+        pieces_sb.append(Piece('Q', color, (row, 3)))
 
         # Knights
-        pieces.append(Piece('N', color, (row, 1)))
-        pieces.append(Piece('N', color, (row, 6)))
+        pieces_sb.append(Piece('N', color, (row, 1)))
+        pieces_sb.append(Piece('N', color, (row, 6)))
 
         # Bishops
-        pieces.append(Piece('B', color, (row, 2)))
-        pieces.append(Piece('B', color, (row, 5)))
+        pieces_sb.append(Piece('B', color, (row, 2)))
+        pieces_sb.append(Piece('B', color, (row, 5)))
 
         # Rooks
-        pieces.append(Piece('R', color, (row, 0)))
-        pieces.append(Piece('R', color, (row, 7)))
-    
-    updateBoard(board,pieces)
+        pieces_sb.append(Piece('R', color, (row, 0)))
+        pieces_sb.append(Piece('R', color, (row, 7)))
+
+
+    board_sb, pieces_sb = updateBoard(board_sb,pieces_sb)
+    return board_sb, pieces_sb
+
         
 '''
 PRINT BOARD (for testing purposes):
     Prints board to console
 '''
-def printBoard(board):
-    for row in board:
+def printBoard(board_pb):
+    for row in board_pb:
         for square in row:
             if square == 0:
                 print(0, end = ' ')

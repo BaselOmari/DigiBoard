@@ -1,3 +1,8 @@
+'''
+NOTES:
+    Facing a lot of issues with passing by reference, have changed configuration to assigning return values.
+'''
+
 import pygame
 import DataOrganization
 
@@ -17,14 +22,16 @@ def load_images():
         else:
             c = 'B'
         IMAGES[f'{c}p'] = pygame.transform.scale(pygame.image.load(f"Chess_Piece_Images/{c}_Pawn.png"), (SQ_SIZE,SQ_SIZE))
-        IMAGES[f'{c}K'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images/{c}_King.png"), (SQ_SIZE, SQ_SIZE))
-        IMAGES[f'{c}Q'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images/{c}_Queen.png"), (SQ_SIZE, SQ_SIZE))
-        IMAGES[f'{c}N'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images/{c}_Knight.png"), (SQ_SIZE, SQ_SIZE))
-        IMAGES[f'{c}B'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images/{c}_Bishop.png"), (SQ_SIZE, SQ_SIZE))
-        IMAGES[f'{c}R'] = pygame.transform.scale(pygame.image.load(f"Chess Piece Images/{c}_Rook.png"), (SQ_SIZE, SQ_SIZE))
+        IMAGES[f'{c}K'] = pygame.transform.scale(pygame.image.load(f"Chess_Piece_Images/{c}_King.png"), (SQ_SIZE, SQ_SIZE))
+        IMAGES[f'{c}Q'] = pygame.transform.scale(pygame.image.load(f"Chess_Piece_Images/{c}_Queen.png"), (SQ_SIZE, SQ_SIZE))
+        IMAGES[f'{c}N'] = pygame.transform.scale(pygame.image.load(f"Chess_Piece_Images/{c}_Knight.png"), (SQ_SIZE, SQ_SIZE))
+        IMAGES[f'{c}B'] = pygame.transform.scale(pygame.image.load(f"Chess_Piece_Images/{c}_Bishop.png"), (SQ_SIZE, SQ_SIZE))
+        IMAGES[f'{c}R'] = pygame.transform.scale(pygame.image.load(f"Chess_Piece_Images/{c}_Rook.png"), (SQ_SIZE, SQ_SIZE))
 
 def start_up():
-    DataOrganization.starting_board(board,pieces)
+    # Starting Position
+    board, pieces = DataOrganization.starting_board(globals()['board'], globals()['pieces'])
+
     pygame.init()
     pygame.display.set_caption("DigiBoard Viewer")
     screen = pygame.display.set_mode((WIDTH,HEIGHT))
