@@ -6,13 +6,21 @@ NOTES:
 import pygame
 import DataOrganization
 import serial
+import threading
 
+# PyGame Variables
 IMAGES = {}
 WIDTH = HEIGHT = 512
 DIMENSION = 8
 SQ_SIZE = HEIGHT//DIMENSION
 MAX_FPS = 15
 
+# Serial Variables
+ser = serial.Serial('COM7', '9600')
+old_move_string = ""
+new_move_string = ""
+
+# Chess Engine Variables
 board = [[0 for i in range(DataOrganization.col_number)] for i in range (DataOrganization.row_number)]
 pieces = []
 
@@ -29,9 +37,20 @@ def load_images():
         IMAGES[f'{c}B'] = pygame.transform.scale(pygame.image.load(f"Chess_Piece_Images/{c}_Bishop.png"), (SQ_SIZE, SQ_SIZE))
         IMAGES[f'{c}R'] = pygame.transform.scale(pygame.image.load(f"Chess_Piece_Images/{c}_Rook.png"), (SQ_SIZE, SQ_SIZE))
 
+def reading_serial():
+    while True:
+        msg = ser.readline()
+        if len(msg) > 0:
+            new_move_string = msg
+
 def start_up():
+    global board,pieces
     # Starting Position
-    board, pieces = DataOrganization.starting_board(globals()['board'], globals()['pieces'])
+    board, pieces = DataOrganization.starting_board(board, pieces)
+
+    t = threading.Thread(target=reading_serial)
+    t.daemon = True
+    t.start()
 
     pygame.init()
     pygame.display.set_caption("DigiBoard Viewer")
@@ -51,6 +70,10 @@ def start_up():
         drawGameState(screen, board)
         clock.tick(MAX_FPS)
         pygame.display.flip()
+
+        if new_move_string != old_move_string:
+            board,pieces = DataOrganization.input_arrangement(board,pieces,new_move_string)
+            old_move_string = new_move_string
 
 
 def drawGameState(screen, board):
