@@ -5,7 +5,7 @@ void fill_board(bool board[]);
 bool board_change(bool const new_board[], bool const old_board[]);
 void add_str_board(bool board[]);
 
-Adafruit_MCP23017 mcp1;    // Instantiate mcp object
+Adafruit_MCP23017 mcp1;
 Adafruit_MCP23017 mcp2;
 Adafruit_MCP23017 mcp3;
 Adafruit_MCP23017 mcp4;
@@ -25,7 +25,7 @@ void setup() {
   pinMode(clock_Pin, INPUT);
   pinMode(reset_Pin, INPUT);
   
-  mcp1.begin();            // "Start" the mcp objects
+  mcp1.begin();
   mcp2.begin(1);
   mcp3.begin(2);
   mcp4.begin(3);
